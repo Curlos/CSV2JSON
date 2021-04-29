@@ -1,12 +1,15 @@
 document.getElementById('convert-json').addEventListener('click', () => {
     let convertedJson = convertCSVtoJSON();
-
     console.log(convertedJson);
+    displayJSON(convertedJson);
 });
 
 const convertCSVtoJSON = () => {
     let csvDataLines = document.getElementById('csv-data').value.split('\n');
     
+    if(csvDataLines.length == 0) {
+        return;
+    }
     let keys = [...csvDataLines[0].split(',')].map((key) => {
         return key.replace(/"/g, '');
     });
@@ -36,4 +39,11 @@ const convertCSVtoJSON = () => {
     })
 
     return jsonDataArray;
+}
+
+const displayJSON = (convertedJson) => {
+    let jsonData = document.getElementById('json-data');
+    
+    jsonData.value = JSON.stringify(convertedJson).replace(/},/g, '},\n');
+    console.log(JSON.stringify(convertedJson).replace(/},/g, '},\n'));
 }
