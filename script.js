@@ -1,15 +1,24 @@
 document.getElementById('convert-json').addEventListener('click', () => {
     let convertedJson = convertCSVtoJSON();
-    console.log(convertedJson);
-    displayJSON(convertedJson);
+    
+    if(convertedJson) {
+        console.log(convertedJson);
+        displayJSON(convertedJson);
+    }
 });
 
 const convertCSVtoJSON = () => {
-    let csvDataLines = document.getElementById('csv-data').value.split('\n');
-    
-    if(csvDataLines.length == 0) {
+
+    if(!document.getElementById('csv-data').value) {
+        displayErrorMessage();
         return;
     }
+
+    let errorDiv = document.getElementById('error');
+    errorDiv.style.display = "None";
+
+    let csvDataLines = document.getElementById('csv-data').value.split('\n').filter((line) => line != "");
+
     let keys = [...csvDataLines[0].split(',')].map((key) => {
         return key.replace(/"/g, '');
     });
@@ -46,4 +55,9 @@ const displayJSON = (convertedJson) => {
     
     jsonData.value = JSON.stringify(convertedJson).replace(/},/g, '},\n');
     console.log(JSON.stringify(convertedJson).replace(/},/g, '},\n'));
+}
+
+const displayErrorMessage = () => {
+    let errorDiv = document.getElementById('error');
+    errorDiv.style.display = "block";
 }
